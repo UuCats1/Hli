@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <title>盒里云</title>
+    
+    <!-- Google Fonts - Quicksand -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: url('https://www.loliapi.com/bg/');
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #0071e3;
+            --heart-color: #ff4d4f;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --glass-bg: rgba(30, 30, 32, 0.25);
+                --glass-border: rgba(255, 255, 255, 0.15);
+                --text-primary: #f5f5f7;
+                --text-secondary: #a0a0a0;
+                --accent-color: #2997ff;
+            }
+        }
+
+        html {
+            font-size: 62.5%;
+            height: -webkit-fill-available;
+        }
+
+        body {
+            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-size: 1.6rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: var(--primary-bg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* 背景遮罩层 - 只在暗色模式下更明显 */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: -1;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body::before {
+                background: rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 80rem;
+            padding: 4rem 6rem;
+            margin: auto;
+        }
+
+        .glass-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 4rem;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 12rem;
+            font-weight: 700;
+            margin: 0 0 2rem;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .error-status {
+            font-size: 2.4rem;
+            font-weight: 500;
+            margin: 0 0 3rem;
+            color: var(--text-primary);
+        }
+
+        .error-message {
+            font-size: 1.6rem;
+            color: var(--text-secondary);
+            margin: 0 0 1.5rem;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 1.4rem;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--glass-border);
+            margin: 4rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .copyright {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copyright .fa-heart {
+            color: var(--heart-color);
+            font-size: 1.2rem;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 113, 227, 0.25);
+        }
+
+        .social-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .social-link:hover::after {
+            opacity: 1;
+        }
+
+        /* 心跳动画 */
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            .glass-container {
+                padding: 3rem;
+            }
+            
+            .error-code {
+                font-size: 8rem;
+            }
+            
+            .error-status {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .glass-container {
+                padding: 2rem;
+                border-radius: 20px;
+            }
+            
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-status {
+                font-size: 1.8rem;
+            }
+            
+            .error-message {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* 高对比度模式支持 */
+        @media (prefers-contrast: high) {
+            :root {
+                --glass-bg: rgba(255, 255, 255, 0.5);
+                --glass-border: rgba(0, 0, 0, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <div class="glass-container">
+                <h1 class="error-code">404</h1>
+                <p class="error-status">啊欧，没有做捏</p>
+                <p class="error-message">Code: <code>错误</code></p>
+                <p class="error-message">通知: <code>业务暂停，请等待10天左右将继续营业</code></p>
+                
+                <div class="divider"></div>
+                
+                <div class="footer-content">
+                    <p class="copyright">
+                        Made with <i class="fas fa-heart"></i> by <span class="author">_RyF</span>
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" data-tooltip="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <!-- 可在此处添加更多社交图标 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检测暗色模式并添加相应类
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark-mode');
+            }
+            
+            // 监听暗色模式变化
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            });
+            
+            // 添加页面加载动画
+            const glassContainer = document.querySelector('.glass-container');
+            glassContainer.style.opacity = '0';
+            glassContainer.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                glassContainer.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                glassContainer.style.opacity = '1';
+                glassContainer.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // 添加错误代码的微妙动画
+            const errorCode = document.querySelector('.error-code');
+            errorCode.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            
+            errorCode.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+            
+            // 预加载背景图
+            const bgUrl = 'https://www.loliapi.com/bg/';
+            const img = new Image();
+            img.src = bgUrl;
+            img.onload = function() {
+                document.body.style.backgroundImage = `url(${bgUrl})`;
+            };
+            
+            // 添加键盘导航支持
+            const socialLinks = document.querySelectorAll('.social-link');
+            socialLinks.forEach(link => {
+                link.addEventListener('focus', function() {
+                    this.style.outline = '2px solid var(--accent-color)';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                link.addEventListener('blur', function() {
+                    this.style.outline = 'none';
+                });
+            });
+            
+            // 添加触摸设备支持
+            if ('ontouchstart' in window) {
+                socialLinks.forEach(link => {
+                    link.addEventListener('touchstart', function() {
+                        this.classList.add('touch-active');
+                    });
+                    
+                    link.addEventListener('touchend', function() {
+                        setTimeout(() => {
+                            this.classList.remove('touch-active');
+                        }, 300);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
