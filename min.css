@@ -1,0 +1,222 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: rgba(255, 255, 255, 0.25);
+            --text-color: #000000;
+            --border-color: rgba(255, 255, 255, 0.4);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --code-bg: rgba(255, 255, 255, 0.3);
+            --link-color: #0070f3;
+            --tooltip-bg: #000000;
+            --tooltip-text: #ffffff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #ffffff;
+                --border-color: rgba(255, 255, 255, 0.25);
+                --shadow-color: rgba(0, 0, 0, 0.3);
+                --code-bg: rgba(0, 0, 0, 0.3);
+                --link-color: #60a5fa;
+                --tooltip-bg: #ffffff;
+                --tooltip-text: #000000;
+            }
+        }
+
+        html {
+            font-size: 62.5%;
+            height: -webkit-fill-available;
+        }
+
+        body {
+            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 1.6rem;
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            
+            /* 背景图设置 - 确保不应用模糊 */
+            background-image: url('https://www.loliapi.com/bg/');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            
+            color: var(--text-color);
+        }
+
+        /* 半透明遮罩层，增强可读性 */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        /* 主容器 - 毛玻璃效果 */
+        .main-container {
+            max-width: 60rem;
+            width: 100%;
+            background: var(--bg-color);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            
+            text-align: center;
+        }
+
+        /* 404标题 */
+        .error-title {
+            font-size: 12rem;
+            font-weight: 700;
+            margin: 0 0 1rem;
+            line-height: 1;
+        }
+
+        /* 状态说明 */
+        .error-message {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .error-detail {
+            font-size: 1.4rem;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* 分割线 */
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 3rem 0;
+        }
+
+        /* 版权信息 */
+        .copyright {
+            font-size: 1.4rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .copyright i {
+            color: #e74c3c;
+        }
+
+        /* GitHub图标 */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: var(--code-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .social-link:hover {
+            background: var(--link-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 悬浮提示 */
+        .tooltip {
+            position: absolute;
+            bottom: -3.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        .social-link:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            html {
+                font-size: 56.25%;
+            }
+            
+            .main-container {
+                padding: 3rem;
+            }
+            
+            .error-title {
+                font-size: 8rem;
+            }
+            
+            .error-message {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 50%;
+            }
+            
+            .main-container {
+                padding: 2rem;
+                border-radius: 16px;
+            }
+            
+            .error-title {
+                font-size: 6rem;
+            }
+        }
+
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white !important;
+            }
+            
+            .main-container {
+                backdrop-filter: none !important;
+                background: white !important;
+                border: 1px solid #ccc !important;
+            }
+        }
